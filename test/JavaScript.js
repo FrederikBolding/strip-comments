@@ -28,11 +28,6 @@ describe('JavaScript comments', () => {
     assert.strictEqual(actual, '\'foo\'; \n var abc = \'xyz\';');
   });
 
-  it('should strip js commend in edge case', () => {
-    const actual = strip("hello/**/ world");
-    assert.strictEqual(actual, 'hello world');
-  });
-
   it('should work on unclosed (invalid) blocks', () => {
     const actual = strip("'foo'; /* I am invalid ");
     assert.strictEqual(actual, '\'foo\'; ');
@@ -55,6 +50,31 @@ describe('JavaScript comments', () => {
     const actual = strip.block('foo // this is a comment\n/* me too */');
     const expected = 'foo // this is a comment\n';
     assert.strictEqual(actual, expected);
+  });
+
+  it('should strip empty js block comment in edge case', () => {
+    const actual = strip("hello/**/ world");
+    assert.strictEqual(actual, 'hello world');
+  });
+
+  it('should strip empty js block comment in edge case with succeeding line comment', () => {
+    const actual = strip("hello/**/ world // foo");
+    assert.strictEqual(actual, 'hello world ');
+  });
+
+  it('should strip empty js block comment in edge case with succeeding block comment', () => {
+    const actual = strip("hello/**/ world /** foo */");
+    assert.strictEqual(actual, 'hello world ');
+  });
+
+  it('should strip empty js block comment in edge case with option: first', () => {
+    const actual = strip("hello/**/ world // foo", { first: true });
+    assert.strictEqual(actual, 'hello world // foo');
+  });
+
+  it('should not strip empty js block comment in string literal', () => {
+    const actual = strip("var bar = '/**/'");
+    assert.strictEqual(actual, "var bar = '/**/'");
   });
 
   // see https://github.com/jonschlinkert/strip-comments/issues/31
