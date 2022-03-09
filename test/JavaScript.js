@@ -28,6 +28,11 @@ describe('JavaScript comments', () => {
     assert.strictEqual(actual, '\'foo\'; \n var abc = \'xyz\';');
   });
 
+  it('should strip js commend in edge case', () => {
+    const actual = strip("hello/**/ world");
+    assert.strictEqual(actual, 'hello world');
+  });
+
   it('should work on unclosed (invalid) blocks', () => {
     const actual = strip("'foo'; /* I am invalid ");
     assert.strictEqual(actual, '\'foo\'; ');
