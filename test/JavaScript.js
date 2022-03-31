@@ -77,6 +77,16 @@ describe('JavaScript comments', () => {
     assert.strictEqual(actual, "var bar = '/**/'");
   });
 
+  it('should allow /* inside block comments', () => {
+    const actual = strip("foo /** /* **/bar");
+    assert.strictEqual(actual, 'foo bar');
+  });
+
+  it('should allow /** inside block comments', () => {
+    const actual = strip("foo /** /** **/bar");
+    assert.strictEqual(actual, 'foo bar');
+  });
+
   // see https://github.com/jonschlinkert/strip-comments/issues/31
   it('should only strip the first comment', () => {
     const expected = read(tests('expected/banner.js'));
