@@ -1,0 +1,19 @@
+name: ci
+# This workflow is triggered on pushes to the repository.
+on: [push, pull_request]
+
+jobs:
+  check:
+    # Job name is Greeting
+    name: check
+    # This job runs on Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+          node-version: '16'
+      - run: yarn install --ignore-scripts
+      - name: Run tests
+        run: yarn run test
